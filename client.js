@@ -11,10 +11,7 @@ let STATE = startingPosition;
 const msgBoard = document.getElementById("msgBoard");
 const uiMsgs = document.createElement('div');
 const btnCreate = document.getElementById("btnCreate");
-const btnJoin = document.getElementById("btnJoin");
 const txtGameID = document.getElementById("txtGameID");
-const divPlayers = document.getElementById("divPlayers");
-const divBoard = document.getElementById("divBoard");
 let white = document.getElementsByClassName("w")
 let black = document.getElementsByClassName("b")
 //const board = [...Array(7*7).keys()];
@@ -41,6 +38,7 @@ btnCreate.addEventListener("click", e => {
 	ws.send(JSON.stringify(payload));
 })
 
+/*
 btnJoin.addEventListener("click", e => {
 	if (gameID === null) { gameID = txtGameID.value;}
 	const payload = {
@@ -50,6 +48,7 @@ btnJoin.addEventListener("click", e => {
 	}
 	ws.send(JSON.stringify(payload));
 })
+*/
 txtGameID.addEventListener("keypress", e => {
 	if (txtGameID.value && e.code === "Enter") { 
 		gameID = txtGameID.value;
@@ -76,7 +75,6 @@ ws.onmessage = message => {
 		color = Object.keys(response.game.players).find(key => response.game.players[key]===clientID);
 		console.log("Game successfully created with ID " + gameID + ", your color is: " + color);
 		updateBoard(response.game.state)
-		console.log(response.game.state)
 		listen(color === "w" ? white : black)
 		uiMsgs.textContent = "You have joined the game. Game ID: " + gameID
 		msgBoard.appendChild(uiMsgs)

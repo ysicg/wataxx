@@ -1,9 +1,10 @@
-//@import url('https://fonts.googleapis.com/css2?family=Asap&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Asap&display=swap');
 * {
 	margin: auto;
 }
 
 body {
+	font-family:asap;
 	background-color: #141c21 ;
 	color: #93a1a1;
 	display: flex;
@@ -15,51 +16,39 @@ body {
 
 header {
 	font-family:asap;
-	padding-bottom: 15px;
-	padding-top: 5px;
 	background-color: #93a1a1; color: #141c21;
 	background-image: linear-gradient(#93a1a1 80% , #141c21);
 	width:100%;
 }
-nav { padding:inherit;}
-.nav-left {float:left;}
-.bar1, .bar2, .bar3 {width: 35px;height: 3px;background-color: black;margin: 4px 3px;}
 
-.nav-right { float:right; margin-right:10px;}
-.nav-right ul a {list-style-type:none;  color: inherit; margin-left:8px; font-size:140%; }
-.menu-element {display: inline-block; }
-
-.flex-container {
+#main {
+	display: grid;
 	width: 100%;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
+	grid-template-columns: repeat(5, 1fr);
 }
 #msgBoard {
-	background-color: black;
-	width:200px;
-	height:600px;
-	float:right;
-	display: flex;
-	position: relative;
+	font-family:asap;
+	display: grid;
+	height:100%;
+	background-color: inherit;
+	grid-template-rows: repeat(5, 1fr);
+}
+#btnCreate {
+	grid-row: 2; /* idk why this doesn't work, had to fill row 1 with empty <div> */
 }
 table {
+	display: flex;
 	margin-top:100px;
-	width:600px;
-	height:600px;
 	position:relative;
 	background-color: #93a1a1;
+	grid-column:2/5;
 }
 td {
 	background: radial-gradient(#93a1a1, #141c21);
 
 	position:relative;
-	width: 83.4333px;;
-	height: 83.4333px;;
-	border:0;
-	padding:0;
-	top:0;
-	bottom:0;
+	width: 83.4333px;
+	height: 83.4333px;
 	border-radius: 50%; 
 }
 
@@ -67,10 +56,6 @@ td {
 .b { width:inherit; height:inherit; border-radius: 50%; background-color: black; }
 
 
-/*
-.black-piece { background-color: black;}
-.white-piece { background-color: white;}
- */
 .clicked-p { 
 	background: radial-gradient(gray, white);
 	width:inherit;
@@ -86,4 +71,12 @@ td {
 }
 
 
+/*
+nav { padding:inherit;}
+.nav-left {float:left;}
+.bar1, .bar2, .bar3 {width: 35px;height: 3px;background-color: black;margin: 4px 3px;}
 
+.nav-right { float:right; margin-right:10px;}
+.nav-right ul a {list-style-type:none;  color: inherit; margin-left:8px; font-size:140%; }
+.menu-element {display: inline-block; }
+*/

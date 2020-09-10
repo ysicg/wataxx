@@ -10,7 +10,7 @@
 	<body>
 
 		<header>
-			<nav class="nav">
+			<!--nav class="nav">
 				<div class="nav-left">
 					<div class="bar1"></div>
 					<div class="bar2"></div>
@@ -18,20 +18,14 @@
 				</div>
 				<div class="nav-right">
 					<ul>
-						<li class="menu-element"><button id='btnCreate'> New Game </button></li>
-						<li class="menu-element"> | </li>
-						<li class="menu-element"><input type='text' id="txtGameID" placeholder="Type j and paste in game ID"</li>
 						<li class="menu-element"><button id='btnJoin'> Join Game </button></li>
 					</ul>
 				</div>
-			</nav>
+			</nav-->
 		</header>
 
 
-		<div id="divPlayers"></div>
-		<div id="divBoard"></div>
-
-		<div class="flex-container">
+		<div id="main">
 			<table>
 				<tr>
 					<td> <div id="sq_0" class="w"></div></td><td> <div id="sq_1"></div></td><td> <div id="sq_2"></div></td><td> <div id="sq_3"></div></td><td> <div id="sq_4"></div></td><td> <div id="sq_5"></div></td><td> <div id="sq_6" class="b"></div></td>
@@ -57,7 +51,16 @@
 			</table>
 
 			<div id="msgBoard"> 
+				<div></div>
+				<div>
+					<button id='btnCreate'> New Game </button>
+				</div>
+				<div>
+					<input type='text' id="txtGameID" placeholder="Type j and paste in game ID">
+				</div>
 			</div>
+
+
 		</div>
 
 		<script src="client.js"></script>
