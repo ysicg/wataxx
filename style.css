@@ -2,7 +2,23 @@
 * {
 	margin: auto;
 }
-
+/* global variables */
+:root {
+	--black-sphere: radial-gradient(
+	circle at 65% 15%,
+	#5c5e61 1px,
+	#5c5e61 3%,
+	rgb(0, 0, 0) 60%,
+	#37383a 100%
+	);
+	--white-sphere: radial-gradient(
+	circle at 65% 15%,
+	#fff 1px,
+	#eeeeee 3%,
+	#a5a4a4 60%,
+	#c5c5c5 100%
+	);
+}
 body {
 	font-family:asap;
 	background-color: #141c21 ;
@@ -77,8 +93,8 @@ td {
 	border-radius: 50%; 
 }
 
-.w { width:inherit; height:inherit; border-radius: 50%; background-color: white; }
-.b { width:inherit; height:inherit; border-radius: 50%; background-color: black; }
+.w { width:inherit; height:inherit; border-radius: 50%; background: var(--white-sphere) }
+.b { width:inherit; height:inherit; border-radius: 50%; background: var(--black-sphere) }
 
 
 .clicked-p { 
