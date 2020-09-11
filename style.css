@@ -32,9 +32,33 @@ header {
 	height:100%;
 	background-color: inherit;
 	grid-template-rows: repeat(5, 1fr);
+	text-align: center;
 }
 #btnCreate {
+
+	background-color: #93a1a1;
+	border-radius: 3px;
+	border: 10px ;
+	text-align:center;
+	width: 200px;
+	height: 65px;
+	font-size: 33px;
+	font-family:asap;
+	color:#141c21;
 	grid-row: 2; /* idk why this doesn't work, had to fill row 1 with empty <div> */
+}
+#txtGameID {
+	background-color: #93a1a1;
+	text-align:center;
+	border-radius: 3px;
+	border: 10px ;
+	width: 200px;
+	height: 30px;
+	font-family:asap;
+	font-size: 15px;
+}
+::placeholder{
+	color:#141c21;
 }
 table {
 	display: flex;

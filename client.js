@@ -8,15 +8,13 @@ const startingPosition = {}; for (let i = 0; i<49; i++) {startingPosition[i] = 0
 startingPosition[0]="w"; startingPosition[6]="b"; startingPosition[42]="b"; startingPosition[48]="w";
 let STATE = startingPosition;
 // HTML Elements
+const msgs = document.getElementById("msgs");
 const msgBoard = document.getElementById("msgBoard");
-const uiMsgs = document.createElement('div');
+const resultMsg = document.getElementById("resultMsg")
 const btnCreate = document.getElementById("btnCreate");
 const txtGameID = document.getElementById("txtGameID");
 let white = document.getElementsByClassName("w")
 let black = document.getElementsByClassName("b")
-//const board = [...Array(7*7).keys()];
-//const cells=document.querySelectorAll("td");
-//const squares=document.querySelectorAll("div");
 let clickedPiece=document.getElementsByClassName("clicked-p");
 let legalSquare=document.getElementsByClassName("legal-square");
 
@@ -36,6 +34,8 @@ btnCreate.addEventListener("click", e => {
 		"clientID": clientID
 	}
 	ws.send(JSON.stringify(payload));
+	msgs.innerHTML='';
+	resultMsg.innerHTML='';
 })
 
 /*
@@ -58,8 +58,18 @@ txtGameID.addEventListener("keypress", e => {
 			"gameID": gameID
 		}
 		ws.send(JSON.stringify(payload));
+	msgs.innerHTML='';
+	resultMsg.innerHTML='';
 	}
 })
+
+function writeParagraph(string, div = msgs) {
+	let p = document.createElement("p")
+	let msg = document.createTextNode(string)
+	p.appendChild(msg)
+	div.appendChild(p)
+	return
+}
 
 ws.onmessage = message => {
 	const response = JSON.parse(message.data);
@@ -76,8 +86,10 @@ ws.onmessage = message => {
 		console.log("Game successfully created with ID " + gameID + ", your color is: " + color);
 		updateBoard(response.game.state)
 		listen(color === "w" ? white : black)
-		uiMsgs.textContent = "You have joined the game. Game ID: " + gameID
-		msgBoard.appendChild(uiMsgs)
+		writeParagraph(`You have the ${color === "w" ? "white" : "black"} pieces.`)
+		writeParagraph("To play, share this ID with your opponent:")
+		writeParagraph(gameID)
+
 	}
 	else if (response.method === "join") {
 		gameID = response.gameID;
@@ -87,13 +99,10 @@ ws.onmessage = message => {
 		const opColor = (color === "w" ? "Black" : "White")
 
 		if (response.joiner === clientID) {
-			uiMsgs.textContent = `You have joined game ${gameID}`;
-			msgBoard.appendChild(uiMsgs);
-			uiMsgs.textContent =`You have the  ${color === "w" ? "white" : "black"} pieces.`;
-			msgBoard.appendChild(uiMsgs)
+			writeParagraph(`You have successfully joined game.`);
+			writeParagraph(`You have the  ${color === "w" ? "white" : "black"} pieces.`);
 		} else {
-			uiMsgs.textContent = `${opColor} has joined the game.`;
-			msgBoard.appendChild(uiMsgs)
+			writeParagraph(`${opColor} has joined the game.`);
 		}
 		updateBoard(response.game.state)
 		clearListener()
@@ -108,7 +117,7 @@ ws.onmessage = message => {
 		updateBoard(response.state);
 		clearListener()
 		if (response.termination) {
-			window.alert(response.termination)
+			writeParagraph(response.termination, resultMsg);
 		}
 		else if (colorTurn(response.turn) === color) listen(color === "w" ? white : black);
 		
