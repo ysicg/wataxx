@@ -24,13 +24,15 @@ header {
 #main {
 	display: grid;
 	width: 100%;
-	grid-template-columns: repeat(5, 1fr);
+/*	grid-template-columns: repeat(5, 1fr);*/
+	grid-template-columns: auto 650px auto;
 }
 #msgBoard {
 	font-family:asap;
 	display: grid;
 	height:100%;
 	background-color: inherit;
+	grid-column:3;
 	grid-template-rows: repeat(5, 1fr);
 	text-align: center;
 }
@@ -45,7 +47,7 @@ header {
 	font-size: 33px;
 	font-family:asap;
 	color:#141c21;
-	grid-row: 2; /* idk why this doesn't work, had to fill row 1 with empty <div> */
+	grid-row: 1; /* idk why this doesn't work, had to fill row 1 with empty <div> */
 }
 #txtGameID {
 	background-color: #93a1a1;
@@ -62,10 +64,9 @@ header {
 }
 table {
 	display: flex;
-	margin-top:100px;
 	position:relative;
 	background-color: #93a1a1;
-	grid-column:2/5;
+	grid-column:2;
 }
 td {
 	background: radial-gradient(#93a1a1, #141c21);
