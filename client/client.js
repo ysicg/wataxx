@@ -64,14 +64,12 @@ ws.onmessage = message => {
 	const response = JSON.parse(message.data);
 	if (response.method === "connect") {
 		clientID = response.clientID;	
-		console.log("Your client ID has been set to: " + clientID);
 	}
 	else if (response.method === "error") {
 		alert(response.error);
 	}
 	else if (response.method === "create") {
 		gameID = response.gameID;
-		console.log("Game successfully created with ID " + gameID + ", your color is: " + response.color);
 		updateBoard(response.state)
 		listen(response.color === "white" ? white : black)
 		writeParagraph(`You have the ${response.color === "w" ? "white" : "black"} pieces.`)
@@ -93,9 +91,7 @@ ws.onmessage = message => {
 		}
 		updateBoard(response.state)
 		clearListener()
-		console.log(`TURN : ${response.turn}, ${color}`)
 		if (color === response.turn) {
-			console.log(`condition met, listen( ${color} )`)
 			listen( color === "w" ? white : black )
 		}
 
@@ -105,7 +101,6 @@ ws.onmessage = message => {
 		STATE = response.state;
 		updateBoard(response.state);
 		clearListener()
-		console.log(`turn === color: ${response.turn} === ${color}`)
 		if (response.termination) {
 			writeParagraph(response.termination, resultMsg);
 		}
