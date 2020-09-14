@@ -74,24 +74,22 @@ ws.onmessage = message => {
 		console.log("Game successfully created with ID " + gameID + ", your color is: " + response.color);
 		updateBoard(response.state)
 		listen(response.color === "white" ? white : black)
-		writeParagraph(`You have the ${response.color === "white" ? "white" : "black"} pieces.`)
+		writeParagraph(`You have the ${response.color === "w" ? "white" : "black"} pieces.`)
 		writeParagraph("To play, share this ID with your opponent:")
 		writeParagraph(gameID)
 
 	}
 	else if (response.method === "join") {
-		gameID = response.gameID;
 
-
-		const opColor = (response.color === "w" ? "b" : "w")
 
 		if (response.joiner === clientID) {
 			color = response.color
+			const opColor = (response.color === "w" ? "b" : "w")
 			writeParagraph(`You have successfully joined game.`);
-			writeParagraph(`You have the  ${response.color === "w" ? "white" : "black"} pieces.`);
+			writeParagraph(`You have the  ${color === "w" ? "white" : "black"} pieces.`);
 		} else {
-			color = opColor
-			writeParagraph(`${response.color} has joined the game.`);
+			color = (response.color === "w" ? "b" : "w")
+			writeParagraph(`${color === "w" ? "Black" : "White"} has joined the game.`);
 		}
 		updateBoard(response.state)
 		clearListener()
@@ -107,10 +105,11 @@ ws.onmessage = message => {
 		STATE = response.state;
 		updateBoard(response.state);
 		clearListener()
+		console.log(`turn === color: ${response.turn} === ${color}`)
 		if (response.termination) {
 			writeParagraph(response.termination, resultMsg);
 		}
-		else if (colorTurn(response.ply) === color) listen(color === "w" ? white : black);
+		else if (response.turn === color) listen(color === "w" ? white : black);
 		
 
 	}

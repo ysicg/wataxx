@@ -91,17 +91,14 @@ wsServer.on("request", request => {
 			const payload = {
 				"method": "state",
 				"state": g[gID].position,
-				"ply": g[gID].ply,
+				"turn": g[gID].turn,
 				"termination": g[gID].termination
 			}
 
 			Object.values(g[gID].players).forEach( clientID => clients[clientID].connection.send( JSON.stringify(payload) ) )
 
 		}
-		
-
 	})
-
 })
 
 
