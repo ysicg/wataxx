@@ -2,18 +2,18 @@
 
 /* Imports */
 
-const Game = require("./lib/Game.js").Game
-const guid = require("./lib/utils.js").guid
-const http = require("http");
-const websocketServer = require("websocket").server
-const app = require("express")();
+const Game = require("./lib/Game.js").Game,
+	guid = require("./lib/utils.js").guid,
+	http = require("http"),
+	websocketServer = require("websocket").server,
+	app = require("express")()
 
 /* Global Variables */
 
-let PORT = process.env.PORT || 9090
+const PORT = process.env.PORT || 9090,
+	clients = [],
+	games = {}
 let color;
-const clients = [];
-const games = {}; 
 
 
 // Serve client files with Express
@@ -38,20 +38,26 @@ runWebSocket(wsServer)
 /*-----------------------------------------------*/
 
 function routeURLs(app) {
+
 	app.get("/", (req, res) => res.sendFile(__dirname + "/" + "client/index.html"))
 	app.get('/style.css', (req, res) => res.sendFile(__dirname + "/" + "client/style.css"))
 	app.get('/client.js', (req, res) => res.sendFile(__dirname + "/" + "client/client.js"))
 }
 
 function runWebSocket(wsServer){
+
 	wsServer.on("request", request => {
+
 		const connection = request.accept(null, request.origin); 
 		const clientID = guid() 
+
 		clients[clientID] = { "connection": connection }
+
 		const payload = {
 			"method": "connect",
 			"clientID": clientID
 		}
+
 		connection.send(JSON.stringify(payload))
 
 		connection.on("open", () => console.log("WS connection opened."))
@@ -60,6 +66,7 @@ function runWebSocket(wsServer){
 		connection.on("message", message => {
 			protocol(JSON.parse(message.utf8Data))
 		})
+
 	})
 
 }
