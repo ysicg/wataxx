@@ -57,7 +57,7 @@ function routeURLs(app) {
 }
 
 
-function httpLaunch(port = '9090') {
+function httpLaunch(port = PORT || 9090) {
 	const httpServer = http.createServer();
 	httpServer.listen(port, () => console.log(`Listening on ${port}.`))
 	return httpServer;
