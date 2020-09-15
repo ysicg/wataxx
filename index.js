@@ -10,6 +10,7 @@ const app = require("express")();
 
 /* Global Variables */
 
+let PORT = process.envPORT || 9091
 let color;
 const clients = [];
 const games = {}; 
@@ -52,13 +53,13 @@ function routeURLs(app) {
 	app.get("/", (req, res) => res.sendFile(__dirname + "/" + "client/index.html"))
 	app.get('/style.css', (req, res) => res.sendFile(__dirname + "/" + "client/style.css"))
 	app.get('/client.js', (req, res) => res.sendFile(__dirname + "/" + "client/client.js"))
-	app.listen(9091, () => console.log("Listening on http port 9091"))
+	app.listen(PORT, () => console.log(`Listening on http port ${PORT}`))
 }
 
 
-function httpLaunch(hostname ='127.0.0.1', port = '9090') {
+function httpLaunch(port = '9090') {
 	const httpServer = http.createServer();
-	httpServer.listen(port, hostname, () => console.log(`Listening on ${port}.`))
+	httpServer.listen(port, () => console.log(`Listening on ${port}.`))
 	return httpServer;
 }
 
