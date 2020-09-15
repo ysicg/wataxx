@@ -1,16 +1,18 @@
 'use strict';
 
+/* Imports */
+
 const Game = require("./lib/Game.js").Game
 const guid = require("./lib/utils.js").guid
 const http = require("http");
 const websocketServer = require("websocket").server
 const app = require("express")();
 
-/*--- global variables ---*/
+/* Global Variables */
+
 let color;
 const clients = [];
-const g = {}; //games
-/*------------------------*/
+const games = {}; 
 
 
 routeURLs(app)
@@ -65,14 +67,14 @@ function protocol(result) {
 
 	if (result.method === "create") {
 
-		const gID = guid();
-		g[gID] = new Game(result.clientID)
+		const gameID = guid();
+		games[gameID] = new Game(result.clientID)
 
 		const payload = {
 			"method": "create",
-			"gameID": gID,
-			"state": g[gID].position,
-			"color": Object.keys(g[gID].players)[0]
+			"gameID": gameID,
+			"state": games[gameID].position,
+			"color": Object.keys(games[gameID].players)[0]
 		}
 
 		clients[result.clientID].connection.send(JSON.stringify(payload));
@@ -80,7 +82,7 @@ function protocol(result) {
 
 	else if (result.method === "join" && clients.length < 2) {
 
-		if (!Object.keys(g).includes(result.gameID)) { 
+		if (!Object.keys(games).includes(result.gameID)) { 
 
 			const payload = {
 				"method": "error",
@@ -92,19 +94,19 @@ function protocol(result) {
 
 		else {
 
-			const gID = result.gameID;
-			g[gID].opponent = result.clientID;
+			const gameID = result.gameID;
+			games[gameID].opponent = result.clientID;
 
 			const payload = {
 				"method": "join", 
 				"joiner": result.clientID,
-				"gameID": gID, 
-				"state": g[gID].position,
-				"turn": g[gID].turn,
-				"color": Object.keys(g[gID].players).find( c => g[gID].players[c] === result.clientID )
+				"gameID": gameID, 
+				"state": games[gameID].position,
+				"turn": games[gameID].turn,
+				"color": Object.keys(games[gameID].players).find( c => games[gameID].players[c] === result.clientID )
 			}
 
-			Object.values(g[gID].players).forEach( c => clients[c].connection.send( JSON.stringify(payload) ) )
+			Object.values(games[gameID].players).forEach( c => clients[c].connection.send( JSON.stringify(payload) ) )
 
 		}
 
@@ -113,17 +115,17 @@ function protocol(result) {
 
 	else if (result.method === "move") {
 
-		const gID = result.gameID
-		g[gID].move = result.move
+		const gameID = result.gameID
+		games[gameID].move = result.move
 
 		const payload = {
 			"method": "state",
-			"state": g[gID].position,
-			"turn": g[gID].turn,
-			"termination": g[gID].termination
+			"state": games[gameID].position,
+			"turn": games[gameID].turn,
+			"termination": games[gameID].termination
 		}
 
-		Object.values(g[gID].players).forEach( clientID => clients[clientID].connection.send( JSON.stringify(payload) ) )
+		Object.values(games[gameID].players).forEach( clientID => clients[clientID].connection.send( JSON.stringify(payload) ) )
 
 	}
 

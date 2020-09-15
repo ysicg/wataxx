@@ -43,6 +43,17 @@ header {
 /*	grid-template-columns: repeat(5, 1fr);*/
 	grid-template-columns: auto 650px auto;
 }
+#pool {
+	display: grid;
+	height:100%;
+	width:100%;
+	background-color: inherit;
+	grid-column:1;
+	grid-template-rows: repeat(5, 1fr);
+	text-align: center;
+}
+#pool-title.p {
+}
 #msgBoard {
 	font-family:asap;
 	display: grid;
