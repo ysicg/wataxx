@@ -1,6 +1,7 @@
 'use strict';
 
-let ws = new WebSocket("ws://localhost:9090");
+let HOST = location.origin.replace(/^http/, 'ws')
+let ws = new WebSocket(HOST);
 
 /* Global Variables */
 

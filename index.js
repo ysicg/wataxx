@@ -10,22 +10,38 @@ const app = require("express")();
 
 /* Global Variables */
 
-let PORT = process.envPORT || 9091
+let PORT = process.env.PORT || 9090
 let color;
 const clients = [];
 const games = {}; 
 
 
+// Serve client files with Express
 routeURLs(app)
 
+
+/* HTTP Server Instantiation */
+
+const httpServer = http.createServer(app).listen(PORT, () => console.log(`httpServer listening on ${PORT}.`))
+
+
+/* WebSocket Server Instantiation */
+
 const wsServer = new websocketServer({
-	"httpServer" : httpLaunch()
+	"httpServer": httpServer
 })
 
+// Handle WebSocket Requests
 runWebSocket(wsServer)
 
 
-/*-----*/
+/*-----------------------------------------------*/
+
+function routeURLs(app) {
+	app.get("/", (req, res) => res.sendFile(__dirname + "/" + "client/index.html"))
+	app.get('/style.css', (req, res) => res.sendFile(__dirname + "/" + "client/style.css"))
+	app.get('/client.js', (req, res) => res.sendFile(__dirname + "/" + "client/client.js"))
+}
 
 function runWebSocket(wsServer){
 	wsServer.on("request", request => {
@@ -49,19 +65,6 @@ function runWebSocket(wsServer){
 }
 
 
-function routeURLs(app) {
-	app.get("/", (req, res) => res.sendFile(__dirname + "/" + "client/index.html"))
-	app.get('/style.css', (req, res) => res.sendFile(__dirname + "/" + "client/style.css"))
-	app.get('/client.js', (req, res) => res.sendFile(__dirname + "/" + "client/client.js"))
-	app.listen(PORT, () => console.log(`Listening on http port ${PORT}`))
-}
-
-
-function httpLaunch(port = PORT || 9090) {
-	const httpServer = http.createServer();
-	httpServer.listen(port, () => console.log(`Listening on ${port}.`))
-	return httpServer;
-}
 
 
 function protocol(result) {
