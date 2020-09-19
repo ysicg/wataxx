@@ -2,6 +2,11 @@
 * {
 	margin: auto;
 }
+	/* initial colors:
+	 * --fg: #141c21;
+	--bg: #93a1a1; 
+	 */
+
 /* global variables */
 :root {
 	--black-sphere: radial-gradient(
@@ -18,6 +23,8 @@
 	#a5a4a4 60%,
 	#c5c5c5 100%
 	);
+ --bg: #141c21;
+ --fg: #93a1a1; 
 }
 
 header {
@@ -25,20 +32,24 @@ header {
 	font-family:asap;
 	margin-top:0px;
 	margin-bottom:0px;
-	height:50px;
-	background-color: #93a1a1; color: #141c21;
-	/*background-image: linear-gradient(#93a1a1 80% , #141c21);*/
+	height:90px;
+	background-color: var(--bg); color: var(--fg);
+	/*background-image: linear-gradient(var(--fg) 80% , #141c21);*/
 	width:100%;
 }
 
 #title {
 	justify-content: center;
+	font-size:43px;
+}
+#title a {
+	color: var(--fg);
 }
 
 body {
 	font-family:asap;
-	background-color: #141c21 ;
-	color: #93a1a1;
+	background-color: var(--bg) ;
+	color: var(--fg);
 	display: flex;
 	height: 100vh;
 	flex-direction: column;
@@ -50,21 +61,28 @@ body {
 #main {
 	display: grid;
 	width: 100%;
-/*	grid-template-columns: repeat(5, 1fr);*/
+	/*	grid-template-columns: repeat(5, 1fr);*/
 	grid-template-columns: auto 650px auto;
+	justify-self:center;
+	justify-items:center;
 }
 #pool {
 	display: grid;
 	height:100%;
-	width:100%;
-	border: 1px solid #93a1a1;
+	width:80%;
 	background-color: inherit;
 	grid-column:1;
 	grid-template-rows: 90px repeat(10, 1fr);
 	text-align: center;
 }
 
-#pool-title.p {
+#pool h1 {
+	display:flex;
+	width: 100%;
+	height: 100%;
+	justify-content:center;
+	align-items: center;
+	border: 1px solid var(--fg);
 }
 
 #pool .game-link {
@@ -75,8 +93,8 @@ body {
 	width: 100%;
 }
 #pool .game-link:hover {
-	color:#141c21;
-	background-color: #93a1a1;
+	color:var(--bg);
+	background-color: var(--fg);
 }
 
 
@@ -86,77 +104,63 @@ body {
 	height:100%;
 	background-color: inherit;
 	grid-column:3;
-	grid-template-rows: 150px 90px repeat(3, 1fr);
+	grid-template-rows: 150px 150px repeat(3, 1fr);
 	text-align: center;
+	line-height: 150%;
 }
 
-#create {
+#create, #join {
 	display:grid;
 }
-#join {
-	display: flex;
-}
 .btn {
-	color:#141c21;
-	background-color: #93a1a1;
+	color:var(--bg);
+	background-color: var(--fg);
 	border-radius: 2px;
-	border: 1px solid #93a1a1;
+	border: 1px solid var(--fg);
 	text-align:center;
 	cursor:pointer;
 }
 input {
-
-	background-color: #93a1a1;
+	background-color: var(--fg);
 	text-align:center;
-	border: 2px solid #141c21;
+	border: 2px solid var(--bg);
 }
-#btnCreate {
-	width: 240px;
-	height: 65px;
-	font-size: 33px;
+#btnCreate, #btnJoin {
+	width: 200px;
+	height: 45px;
+	font-size: 25px;
 }
 
 .btn:hover {
-	color:#93a1a1;
-	background-color:#141c21 ;
+	color:var(--fg);
+	background-color:var(--bg) ;
 }
 
-#userNameField {
-
+#userNameField, #txtGameID {
 	width: 170px;
 	height: 30px;
 	font-size: 15px;
 }
 
-#txtGameID {
-	border: 10px ;
-	width: 160px;
-	height: 30px;
-	font-size: 15px;
-}
-#btnJoin {
-	height: 30px;
-	font-size: 15px;
-	width: 60px;
-}
 ::placeholder{
-	color:#141c21;
+	color:var(--bg);
 }
 
 table {
 	display: flex;
 	position:relative;
-	background-color: #93a1a1;
+	background-color: var(--bg);
 	grid-column:2;
 }
 
 td {
-	background: radial-gradient(#93a1a1, #141c21);
-
+	/*background: radial-gradient(var(--fg), var(--bg));*/
+	background: #747979;
 	position:relative;
 	width: 83.4333px;
 	height: 83.4333px;
-	border-radius: 50%; 
+	border-radius: 0%; 
+	border: 1px solid var(--bg);
 }
 
 .w { width:inherit; height:inherit; border-radius: 50%; background: var(--white-sphere) }
@@ -172,39 +176,29 @@ td {
 .legal-square { 
 	width:inherit;
 	height:inherit;
-	border-radius: 50%; 
-	background: radial-gradient(gray, green);
+	border-radius: 0%; 
+	background: #b3b3b3 ;
 }
 
 
-/*nav { padding:inherit;}
-.nav-left {float:left;}
-.bar1, .bar2, .bar3 {width: 35px;height: 3px;background-color: black;margin: 4px 3px;}
-
-.nav-right { float:right; margin-right:10px;}
-.nav-right ul a {list-style-type:none;  color: inherit; margin-left:8px; font-size:140%; }
-.menu-element {display: inline-block; }
-*/
 
 
 footer {
-  color: #141c21;
-  background-image: linear-gradient(#141c21, #93a1a1);
-  position:fixed;
-  bottom:0; 
-  padding-top: 10px;
-  width:100%;
+	position:fixed;
+	bottom:0; 
+	padding-top: 10px;
+	width:100%;
 	display: flex;
 	justify-content: center;
 }
 
 .foot span {
-  display: inline-block;  /* because transforms don't apply to inline elements by default*/
-  transition: 0.3s;
-  color: #141c21;
+	display: inline-block;  /* because transforms don't apply to inline elements by default*/
+	transition: 0.3s;
+	color: var(--fg);
 }
 .foot a {
-	color: #141c21;
+	color: var(--fg);
 	text-decoration: none;
 }
 

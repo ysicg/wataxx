@@ -17,6 +17,7 @@ let STATE = startingPosition;
 /* HTML Elements */
 
 const boardMsgs = document.getElementById("msgs"),
+	boardMsgs2 = document.getElementById("msgs2"),
 	msgBoard = document.getElementById("msgBoard"),
 	resultMsg = document.getElementById("resultMsg"),
 	btnCreate = document.getElementById("btnCreate"),
@@ -32,12 +33,20 @@ let white = document.getElementsByClassName("w"),
 
 /* On Page Load Events */
 
+function clearMsgBoard() {
+	boardMsgs.innerHTML='';
+	boardMsgs2.innerHTML='';
+	resultMsg.innerHTML='';
+}
 
 listen(white);
 
 btnCreate.addEventListener("click", e => {
 
+	if (gameID) removeElement(gameID)
+
 	userName = userNameField.value ? userNameField.value : "Anonymous";
+
 	const payload = {
 		"method" : "create",
 		"clientID": clientID,
@@ -49,8 +58,7 @@ btnCreate.addEventListener("click", e => {
 	}
 
 	ws.send(JSON.stringify(payload));
-	boardMsgs.innerHTML='';
-	resultMsg.innerHTML='';
+	clearMsgBoard()
 
 })
 
@@ -85,9 +93,9 @@ ws.onmessage = message => {
 		if (response.clientID === clientID) {
 			updateBoard(response.state)
 			listen(response.color === "white" ? white : black)
-			writeParagraph(`You have the ${response.color === "w" ? "white" : "black"} pieces.`)
-			writeParagraph("Waiting for an opponent to join.")
-			writeParagraph("You can alternatively play with a friend by having them enter this ID:")
+			writeParagraph("Wait for an opponent to join your seek.")
+			writeParagraph("Or share this game ID with a friend:")
+			writeParagraph(`You have the ${response.color === "w" ? "white" : "black"} pieces.`, boardMsgs2)
 			writeParagraph(gameID)
 		}
 
@@ -100,13 +108,13 @@ ws.onmessage = message => {
 			color = response.color
 			const opColor = (response.color === "w" ? "b" : "w")
 			writeParagraph(`You have successfully joined the game.`);
-			writeParagraph(`You have the  ${color === "w" ? "white" : "black"} pieces.`);
+			writeParagraph(`You have the  ${color === "w" ? "white" : "black"} pieces.`, boardMsgs2);
 		} 
 
 		else {
 
 			color = (response.color === "w" ? "b" : "w")
-			writeParagraph(`${color === "w" ? "Black" : "White"} has joined the game.`);
+			writeParagraph(`${color === "w" ? "Black" : "White"} has joined the game.`, boardMsgs2);
 
 		}
 
@@ -151,12 +159,11 @@ function populatePool(pooler = userName, gameID, creatorID) {
 
 	div.appendChild(usr)
 	pool.appendChild(div)
-
+	div.className = "game-link";
+	div.style.cursor = "pointer";
 
 	if (creatorID !== clientID) {
-		div.className = "game-link";
 		div.title = "Click to join this game"
-		div.style.cursor = "pointer";
 		div.addEventListener("click", () => {
 			const payload = {
 				"method" : "join",
@@ -166,7 +173,16 @@ function populatePool(pooler = userName, gameID, creatorID) {
 			ws.send(JSON.stringify(payload));
 			div.parentNode.removeChild(div);
 		})
+	}
+	else {
 
+		div.title = "Click cancel this seek"
+		div.addEventListener("click", () => {
+
+			div.parentNode.removeChild(div);
+			clearMsgBoard()
+
+		})
 	}
 }
 
