@@ -30,6 +30,7 @@ header {
 	/*background-image: linear-gradient(#93a1a1 80% , #141c21);*/
 	width:100%;
 }
+
 #title {
 	justify-content: center;
 }
@@ -85,54 +86,58 @@ body {
 	height:100%;
 	background-color: inherit;
 	grid-column:3;
-	grid-template-rows: repeat(5, 1fr);
+	grid-template-rows: 150px 90px repeat(3, 1fr);
 	text-align: center;
 }
 
 #create {
-
 	display:grid;
-
 }
-#btnCreate {
-
+#join {
+	display: flex;
+}
+.btn {
 	color:#141c21;
 	background-color: #93a1a1;
-	border-radius: 3px;
+	border-radius: 2px;
 	border: 1px solid #93a1a1;
 	text-align:center;
-	width: 240px;
-	height: 65px;
-	font-size: 33px;
 	cursor:pointer;
 }
-#btnCreate:hover {
-
-	color:#93a1a1;
-	background-color:#141c21 ;
-}
-#userNameField {
+input {
 
 	background-color: #93a1a1;
 	text-align:center;
 	border: 2px solid #141c21;
+}
+#btnCreate {
+	width: 240px;
+	height: 65px;
+	font-size: 33px;
+}
+
+.btn:hover {
+	color:#93a1a1;
+	background-color:#141c21 ;
+}
+
+#userNameField {
+
 	width: 170px;
 	height: 30px;
 	font-size: 15px;
 }
 
 #txtGameID {
-	display:flex;
-	justify-content:center;
-	align-items: center;
-	grid-row: 1;
-	background-color: #93a1a1;
-	text-align:center;
-	border-radius: 3px;
 	border: 10px ;
-	width: 200px;
+	width: 160px;
 	height: 30px;
 	font-size: 15px;
+}
+#btnJoin {
+	height: 30px;
+	font-size: 15px;
+	width: 60px;
 }
 ::placeholder{
 	color:#141c21;
@@ -173,13 +178,14 @@ td {
 }
 
 
-nav { padding:inherit;}
+/*nav { padding:inherit;}
 .nav-left {float:left;}
 .bar1, .bar2, .bar3 {width: 35px;height: 3px;background-color: black;margin: 4px 3px;}
 
 .nav-right { float:right; margin-right:10px;}
 .nav-right ul a {list-style-type:none;  color: inherit; margin-left:8px; font-size:140%; }
 .menu-element {display: inline-block; }
+*/
 
 
 footer {

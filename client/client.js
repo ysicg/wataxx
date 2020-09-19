@@ -20,6 +20,7 @@ const boardMsgs = document.getElementById("msgs"),
 	msgBoard = document.getElementById("msgBoard"),
 	resultMsg = document.getElementById("resultMsg"),
 	btnCreate = document.getElementById("btnCreate"),
+	btnJoin = document.getElementById("btnJoin"),
 	txtGameID = document.getElementById("txtGameID"),
 	userNameField = document.getElementById("userNameField")
 
@@ -54,21 +55,15 @@ btnCreate.addEventListener("click", e => {
 })
 
 
+btnJoin.addEventListener("click", join)
+
 txtGameID.addEventListener("keypress", e => {
-
 	if (txtGameID.value && e.code === "Enter") { 
-		gameID = txtGameID.value;
-		const payload = {
-			"method" : "join",
-			"clientID": clientID,
-			"gameID": gameID
-		}
-		ws.send(JSON.stringify(payload));
-		boardMsgs.innerHTML='';
-		resultMsg.innerHTML='';
-
+		join()
 	}
 })
+
+
 
 // WebSocket Protocol
 
@@ -112,9 +107,11 @@ ws.onmessage = message => {
 
 			color = (response.color === "w" ? "b" : "w")
 			writeParagraph(`${color === "w" ? "Black" : "White"} has joined the game.`);
-			removeElement(clientID)
 
 		}
+
+		if (document.contains(document.getElementById(gameID)))
+			removeElement(response.gameID)
 
 		updateBoard(response.state)
 		clearListener()
@@ -144,12 +141,12 @@ function populatePool(pooler = userName, gameID, creatorID) {
 
 
 	const pool = document.getElementById("pool")
-	
+
 	let div = document.createElement("div"),
 		usr = document.createTextNode(pooler)
-	div.id = clientID;
+	div.id = gameID;
 
-	if (document.contains(document.getElementById(clientID)))
+	if (document.contains(document.getElementById(gameID)))
 		removeElement(clientID)
 
 	div.appendChild(usr)
@@ -157,7 +154,7 @@ function populatePool(pooler = userName, gameID, creatorID) {
 
 
 	if (creatorID !== clientID) {
-	div.className = "game-link";
+		div.className = "game-link";
 		div.title = "Click to join this game"
 		div.style.cursor = "pointer";
 		div.addEventListener("click", () => {
@@ -292,11 +289,11 @@ function legalSquares(id) {
 
 	ls.forEach( (element, index, ls) => {
 
-			if (STATE[element] === 0) {
-				document.getElementById("sq_" + ls[index].toString()).classList.add("legal-square")
-			}
+		if (STATE[element] === 0) {
+			document.getElementById("sq_" + ls[index].toString()).classList.add("legal-square")
+		}
 
-		})
+	})
 
 }
 
@@ -320,6 +317,19 @@ function updateBoard(state) {
 
 /* Utils */
 
+function join() {
+
+	gameID = txtGameID.value;
+	const payload = {
+		"method" : "join",
+		"clientID": clientID,
+		"gameID": gameID
+	}
+	ws.send(JSON.stringify(payload));
+	boardMsgs.innerHTML='';
+	resultMsg.innerHTML='';
+}
+
 function id2base7(id) {
 	/* convert id to base 7. Example: "sq_8" -> "12"  */
 
@@ -339,8 +349,8 @@ function colorTurn(turn) {
 /* Game Messages */
 
 function wrap(el, wrapper) {
-	    el.parentNode.insertBefore(wrapper, el);
-	    wrapper.appendChild(el);
+	el.parentNode.insertBefore(wrapper, el);
+	wrapper.appendChild(el);
 }
 
 function writeParagraph(string, div = boardMsgs) {
