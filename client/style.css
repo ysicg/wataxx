@@ -164,7 +164,6 @@ td {
 
 
 .clicked-p { 
-	background: radial-gradient(gray, white);
 	width:inherit;
 	height:inherit;
 	border-radius: 50%; 

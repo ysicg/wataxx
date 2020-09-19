@@ -193,21 +193,21 @@ function onClick() {
 
 	const id = this.id ;
 
-	if (this.className.includes(color)){
+	if (this.className.includes("clicked-p")){
+		clearLegalSquare()
+		document.getElementById(id).className = color
+		listen( color === "w" ? white : black )
+	}
+
+	else if (this.className.includes(color)){
 		move.from = parseInt(id.match(/(\d+)/)[0])
-		document.getElementById(id).className = "clicked-p"
-		console.log(`DEBUG`)
+		document.getElementById(id).classList.add("clicked-p")
 		legalSquares(id)
 		clearListener()
 		listen(legalSquare)
 		listen(clickedPiece)
 	}
 
-	else if (this.className.includes("clicked-p")){
-		clearLegalSquare()
-		document.getElementById(id).className = color
-		listen( color === "w" ? white : black )
-	}
 
 	else if (this.className.includes("legal-square")){
 
