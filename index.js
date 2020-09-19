@@ -11,7 +11,7 @@ const Game = require("./lib/Game.js").Game,
 /* Global Variables */
 
 const PORT = process.env.PORT || 9090,
-	clients = [],
+	clients = {},
 	games = {}
 let color;
 
@@ -44,6 +44,7 @@ function routeURLs(app) {
 	app.get('/client.js', (req, res) => res.sendFile(__dirname + "/" + "client/client.js"))
 }
 
+
 function runWebSocket(wsServer){
 
 	wsServer.on("request", request => {
@@ -52,6 +53,7 @@ function runWebSocket(wsServer){
 		const clientID = guid() 
 
 		clients[clientID] = { "connection": connection }
+		//console.log(Object.keys(clients))
 
 		const payload = {
 			"method": "connect",
@@ -72,27 +74,30 @@ function runWebSocket(wsServer){
 }
 
 
-
-
 function protocol(result) {
 
 	if (result.method === "create") {
 
+		console.log(result.userName)
 		const gameID = guid();
 		games[gameID] = new Game(result.clientID)
 
 		const payload = {
 			"method": "create",
+			"clientID": result.clientID,
 			"gameID": gameID,
 			"state": games[gameID].position,
-			"color": Object.keys(games[gameID].players)[0]
+			"color": Object.keys(games[gameID].players)[0],
+			"userName": result.userName
 		}
 
-		clients[result.clientID].connection.send(JSON.stringify(payload));
+		//clients[result.clientID].connection.send(JSON.stringify(payload));
+		Object.keys(clients).forEach(client => clients[client].connection.send(JSON.stringify(payload)));
 	}
 
-	else if (result.method === "join" && clients.length < 2) {
+	else if (result.method === "join") {
 
+		console.log("we're in")
 		if (!Object.keys(games).includes(result.gameID)) { 
 
 			const payload = {
@@ -117,7 +122,10 @@ function protocol(result) {
 				"color": Object.keys(games[gameID].players).find( c => games[gameID].players[c] === result.clientID )
 			}
 
-			Object.values(games[gameID].players).forEach( c => clients[c].connection.send( JSON.stringify(payload) ) )
+			Object.values(games[gameID].players).forEach( c => {
+				clients[c].connection.send( JSON.stringify(payload) ) 
+				console.log(c)
+			})
 
 		}
 

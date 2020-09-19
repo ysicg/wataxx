@@ -10,25 +10,17 @@
 	<body>
 
 		<header>
-			<!--nav class="nav">
-				<div class="nav-left">
-					<div class="bar1"></div>
-					<div class="bar2"></div>
-					<div class="bar3"></div>
-				</div>
-				<div class="nav-right">
-					<ul>
-						<li class="menu-element"><button id='btnJoin'> Join Game </button></li>
-					</ul>
-				</div>
-			</nav-->
+			<div id="title"> 
+				<h1 >Ataxx</h1>
+			</div>
+
 		</header>
 
 
 		<div id="main">
 
 			<div id="pool">
-				 <h1>Lobby</h1>
+				 <h1>Pool</h1>
 			</div>
 
 			<table>
@@ -57,8 +49,9 @@
 
 
 			<div id="msgBoard"> 
-				<div>
-					<button id='btnCreate'> New Game </button>
+				<div id = "create">
+					<button id='btnCreate'> Create Game </button>
+					<input type='text' id="userNameField" placeholder="Username (optional)">
 				</div>
 				<div>
 					<input type='text' id="txtGameID" placeholder="Enter game ID here">

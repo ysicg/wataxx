@@ -19,6 +19,21 @@
 	#c5c5c5 100%
 	);
 }
+
+header {
+	display: flex;
+	font-family:asap;
+	margin-top:0px;
+	margin-bottom:0px;
+	height:50px;
+	background-color: #93a1a1; color: #141c21;
+	/*background-image: linear-gradient(#93a1a1 80% , #141c21);*/
+	width:100%;
+}
+#title {
+	justify-content: center;
+}
+
 body {
 	font-family:asap;
 	background-color: #141c21 ;
@@ -30,12 +45,6 @@ body {
 }
 
 
-header {
-	font-family:asap;
-	background-color: #93a1a1; color: #141c21;
-	background-image: linear-gradient(#93a1a1 80% , #141c21);
-	width:100%;
-}
 
 #main {
 	display: grid;
@@ -47,13 +56,29 @@ header {
 	display: grid;
 	height:100%;
 	width:100%;
+	border: 1px solid #93a1a1;
 	background-color: inherit;
 	grid-column:1;
-	grid-template-rows: repeat(5, 1fr);
+	grid-template-rows: 90px repeat(10, 1fr);
 	text-align: center;
 }
+
 #pool-title.p {
 }
+
+#pool .game-link {
+	display:flex;
+	justify-content:center;
+	align-items: center;
+	height: 100%;
+	width: 100%;
+}
+#pool .game-link:hover {
+	color:#141c21;
+	background-color: #93a1a1;
+}
+
+
 #msgBoard {
 	font-family:asap;
 	display: grid;
@@ -63,38 +88,63 @@ header {
 	grid-template-rows: repeat(5, 1fr);
 	text-align: center;
 }
+
+#create {
+
+	display:grid;
+
+}
 #btnCreate {
 
+	color:#141c21;
 	background-color: #93a1a1;
 	border-radius: 3px;
-	border: 10px ;
+	border: 1px solid #93a1a1;
 	text-align:center;
-	width: 200px;
+	width: 240px;
 	height: 65px;
 	font-size: 33px;
-	font-family:asap;
-	color:#141c21;
-	grid-row: 1; /* idk why this doesn't work, had to fill row 1 with empty <div> */
+	cursor:pointer;
 }
+#btnCreate:hover {
+
+	color:#93a1a1;
+	background-color:#141c21 ;
+}
+#userNameField {
+
+	background-color: #93a1a1;
+	text-align:center;
+	border: 2px solid #141c21;
+	width: 170px;
+	height: 30px;
+	font-size: 15px;
+}
+
 #txtGameID {
+	display:flex;
+	justify-content:center;
+	align-items: center;
+	grid-row: 1;
 	background-color: #93a1a1;
 	text-align:center;
 	border-radius: 3px;
 	border: 10px ;
 	width: 200px;
 	height: 30px;
-	font-family:asap;
 	font-size: 15px;
 }
 ::placeholder{
 	color:#141c21;
 }
+
 table {
 	display: flex;
 	position:relative;
 	background-color: #93a1a1;
 	grid-column:2;
 }
+
 td {
 	background: radial-gradient(#93a1a1, #141c21);
 
@@ -123,7 +173,6 @@ td {
 }
 
 
-/*
 nav { padding:inherit;}
 .nav-left {float:left;}
 .bar1, .bar2, .bar3 {width: 35px;height: 3px;background-color: black;margin: 4px 3px;}
@@ -131,7 +180,6 @@ nav { padding:inherit;}
 .nav-right { float:right; margin-right:10px;}
 .nav-right ul a {list-style-type:none;  color: inherit; margin-left:8px; font-size:140%; }
 .menu-element {display: inline-block; }
-*/
 
 
 footer {
@@ -146,7 +194,7 @@ footer {
 }
 
 .foot span {
-  display: inline-block;  /* because transforms doesn't apply to inline elements by default*/
+  display: inline-block;  /* because transforms don't apply to inline elements by default*/
   transition: 0.3s;
   color: #141c21;
 }
@@ -155,7 +203,6 @@ footer {
 	text-decoration: none;
 }
 
-/* apply transform on element inside hovered parent*/
 .foot:hover .transR { transform: translate(120%); }
 .foot:hover .transL { transform: translateX(-120%); }
 

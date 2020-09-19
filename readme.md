@@ -9,6 +9,7 @@ Its main goal is to serve its author as a gateway first project to web developme
 
 
 
+
 If you have node.js and npm installed on your local machine, clone the repository and run
 
 ```
@@ -17,5 +18,7 @@ npm run dev
 
 ```
 
-to see bugs at _localhost:9091_.
+to see bugs at _localhost:9090_.
+
+Or visit
 
