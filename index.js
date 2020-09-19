@@ -53,7 +53,6 @@ function runWebSocket(wsServer){
 		const clientID = guid() 
 
 		clients[clientID] = { "connection": connection }
-		//console.log(Object.keys(clients))
 
 		const payload = {
 			"method": "connect",
@@ -78,6 +77,22 @@ function protocol(result) {
 
 	if (result.method === "create") {
 
+			console.log(result.alone)
+		if (result.alone) { // game againsts oneself
+			games[result.clientID] = new Game(result.clientID, "w")
+			games[result.clientID].opponent = result.clientID
+			const payload = {
+				"method": "create",
+				"clientID": result.clientID,
+				"gameID": result.clientID,
+				"state": games[result.clientID].position,
+				"color": Object.keys(games[result.clientID].players)[0],
+				"alone": true
+			}
+			clients[result.clientID].connection.send(JSON.stringify(payload));
+		}
+
+		else {
 		console.log(result.userName)
 		const gameID = guid();
 		games[gameID] = new Game(result.clientID)
@@ -94,10 +109,10 @@ function protocol(result) {
 		//clients[result.clientID].connection.send(JSON.stringify(payload));
 		Object.keys(clients).forEach(client => clients[client].connection.send(JSON.stringify(payload)));
 	}
+	}
 
 	else if (result.method === "join") {
 
-		console.log("we're in")
 		if (!Object.keys(games).includes(result.gameID)) { 
 
 			const payload = {
@@ -139,6 +154,8 @@ function protocol(result) {
 
 		const payload = {
 			"method": "state",
+			"clientID": result.clientID,
+			"gameID": gameID,
 			"state": games[gameID].position,
 			"turn": games[gameID].turn,
 			"termination": games[gameID].termination

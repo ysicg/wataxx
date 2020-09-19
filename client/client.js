@@ -25,7 +25,7 @@ const boardMsgs = document.getElementById("msgs"),
 	txtGameID = document.getElementById("txtGameID"),
 	userNameField = document.getElementById("userNameField")
 
-let white = document.getElementsByClassName("w"),
+const white = document.getElementsByClassName("w"),
 	black = document.getElementsByClassName("b"),
 	clickedPiece=document.getElementsByClassName("clicked-p"),
 	legalSquare=document.getElementsByClassName("legal-square")
@@ -33,13 +33,21 @@ let white = document.getElementsByClassName("w"),
 
 /* On Page Load Events */
 
-function clearMsgBoard() {
-	boardMsgs.innerHTML='';
-	boardMsgs2.innerHTML='';
-	resultMsg.innerHTML='';
+
+// start game againt oneself
+function alone() {
+	const payloadAlone = {
+		"method" : "create",
+		"clientID": clientID,
+		"userName": userName,
+		"alone": "yes"
+	}
+
+	ws.send(JSON.stringify(payloadAlone))
 }
 
-listen(white);
+
+//
 
 btnCreate.addEventListener("click", e => {
 
@@ -50,7 +58,7 @@ btnCreate.addEventListener("click", e => {
 	const payload = {
 		"method" : "create",
 		"clientID": clientID,
-		"userName": userName
+		"userName": userName,
 	}
 
 	if (ws.readyState === ws.CLOSED) {
@@ -59,6 +67,7 @@ btnCreate.addEventListener("click", e => {
 
 	ws.send(JSON.stringify(payload));
 	clearMsgBoard()
+	clearListener()
 
 })
 
@@ -81,24 +90,35 @@ ws.onmessage = message => {
 
 	if (response.method === "connect") {
 		clientID = response.clientID;	
+		alone();
 	} else if (response.method === "error") {
 		alert(response.error);
 	}
 
+
 	else if (response.method === "create") {
 
-		gameID = response.gameID;
-		populatePool(response.userName, gameID, response.clientID)
-
-		if (response.clientID === clientID) {
-			updateBoard(response.state)
-			listen(response.color === "white" ? white : black)
-			writeParagraph("Wait for an opponent to join your seek.")
-			writeParagraph("Or share this game ID with a friend:")
-			writeParagraph(`You have the ${response.color === "w" ? "white" : "black"} pieces.`, boardMsgs2)
-			writeParagraph(gameID)
+		if (response.alone) {
+			gameID = response.gameID;
+			color = response.color;
+			listen(color === "w" ? white : black)
+			console.log("alone response")
 		}
 
+		else {
+			gameID = response.gameID;
+			populatePool(response.userName, gameID, response.clientID)
+
+			if (response.clientID === clientID) {
+				updateBoard(response.state)
+				listen(response.color === "white" ? white : black)
+				writeParagraph("Wait for an opponent to join your seek.")
+				writeParagraph("Or share this game ID with a friend:")
+				writeParagraph(`You have the ${response.color === "w" ? "white" : "black"} pieces.`, boardMsgs2)
+				writeParagraph(gameID)
+			}
+
+		}
 	}
 
 	else if (response.method === "join") {
@@ -131,6 +151,8 @@ ws.onmessage = message => {
 	}
 
 	else if (response.method === "state"){
+		console.log(response.gameID)
+		console.log(response.clientID)
 
 		STATE = response.state;
 		updateBoard(response.state);
@@ -139,6 +161,7 @@ ws.onmessage = message => {
 		if (response.termination) {
 			writeParagraph(response.termination, resultMsg);
 		} 
+		else if (response.gameID === response.clientID) {color = response.turn; listen(color === "w" ? white : black)}
 		else if (response.turn === color) listen(color === "w" ? white : black);
 
 	}
@@ -176,7 +199,7 @@ function populatePool(pooler = userName, gameID, creatorID) {
 	}
 	else {
 
-		div.title = "Click cancel this seek"
+		div.title = "Click to cancel this seek"
 		div.addEventListener("click", () => {
 
 			div.parentNode.removeChild(div);
@@ -188,7 +211,7 @@ function populatePool(pooler = userName, gameID, creatorID) {
 
 function removeElement(id) {
 	const element = document.getElementById(id)
-	element.parentNode.removeChild(element)
+	if (element) element.parentNode.removeChild(element)
 }
 
 
@@ -235,15 +258,15 @@ function onClick() {
 			"move": move
 		}
 
-		ws.send(JSON.stringify(payload));
+		if (gameID) ws.send(JSON.stringify(payload));
 
 		document.getElementById(id).className = color
 
 		clearLegalSquare()
 		clearClickedPiece()
 		clearListener()
+		}
 
-	}
 
 }
 
@@ -379,6 +402,11 @@ function writeParagraph(string, div = boardMsgs) {
 
 }
 
+function clearMsgBoard() {
+	boardMsgs.innerHTML='';
+	boardMsgs2.innerHTML='';
+	resultMsg.innerHTML='';
+}
 
 
 
