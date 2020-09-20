@@ -20,10 +20,11 @@
 					<a href= "https://wataxx.herokuapp.com" style="text-decoration: none;"> Ataxx </a>
 				</div>
 				<div id="title-msg">
-					<p><br>Shuffle the pieces around to figure out the rules!</p>
-					<p>Play against an opponent by creating or joining a game!</p>
+					<p>Shuffle the pieces around to figure out the rules!<br>
+					Play against an opponent by creating or joining a game.</p>
 				</div>
 			</div>
+
 
 
 				<div id="pool">
@@ -52,6 +53,7 @@
 
 
 				<div id="msgBoard"> 
+					<div id = "startGame">
 					<div id = "create">
 						<button id='btnCreate' class="btn"> Create Game </button>
 						<input type='text' id="userNameField" placeholder="Username (optional)">
@@ -59,6 +61,7 @@
 					<div id = "join">
 						<button id="btnJoin" class="btn"> Join Game </button>
 						<input type='text' id="txtGameID" placeholder="Enter game ID here">
+					</div>
 					</div>
 					<div id="msgs"> </div>
 					<div id="msgs2"> </div>
@@ -69,11 +72,9 @@
 
 
 
-			<footer>
 				<div class="foot">
 					<span class="transL">&mdash;</span><a href="https://github.com/ysicg/wataxx" title="github">Source Code</a> <span class="transR">&mdash;</span>
 				</div>
-			</footer>
 		</div>
 			<script src="client.js"></script>
 
