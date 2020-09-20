@@ -5,83 +5,85 @@
 		<meta charset="utf-8">
 		<title> wataxx </title>
 		<link rel="stylesheet" href="style.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 	</head>
 
 	<body>
 
 		<header>
-			<div id="title"> 
-				<a href= "https://wataxx.herokuapp.com" style="text-decoration: none;"> Ataxx </a>
-			</div>
-			<div id="title-msg">
-				<p><br>Shuffle the pieces around to figure out the rules!</p>
-				<p>Play against an opponent by creating or joining a game!</p>
-			</div>
 
 		</header>
 
-
-		<div id="main">
-
-			<div id="pool">
-				 <h1>Pool</h1>
-			</div>
-
-			<table>
-				<tr>
-					<td> <div id="sq_0" class="w"></div></td><td> <div id="sq_1"></div></td><td> <div id="sq_2"></div></td><td> <div id="sq_3"></div></td><td> <div id="sq_4"></div></td><td> <div id="sq_5"></div></td><td> <div id="sq_6" class="b"></div></td>
-				</tr>
-				<tr>
-					<td> <div id="sq_7"></div></td><td> <div id="sq_8"></div></td><td> <div id="sq_9"></div></td><td> <div id="sq_10"></div></td><td> <div id="sq_11"></div></td><td> <div id="sq_12"></div></td><td> <div id="sq_13"></div></td>
-				</tr>
-				<tr>
-					<td> <div id="sq_14"></div></td><td> <div id="sq_15"></div></td><td> <div id="sq_16"></div></td><td> <div id="sq_17"></div></td><td> <div id="sq_18"></div></td><td> <div id="sq_19"></div></td><td> <div id="sq_20"></div></td>
-				</tr>
-				<tr>
-					<td> <div id="sq_21"></div></td><td> <div id="sq_22"></div></td><td> <div id="sq_23"></div></td><td> <div id="sq_24"></div></td><td> <div id="sq_25"></div></td><td> <div id="sq_26"></div></td><td> <div id="sq_27"></div></td>
-				</tr>
-				<tr>
-					<td> <div id="sq_28"></div></td><td> <div id="sq_29"></div></td><td> <div id="sq_30"></div></td><td> <div id="sq_31"></div></td><td> <div id="sq_32"></div></td><td> <div id="sq_33"></div></td><td> <div id="sq_34"></div></td>
-				</tr>
-				<tr>
-					<td> <div id="sq_35"></div></td><td> <div id="sq_36"></div></td><td> <div id="sq_37"></div></td><td> <div id="sq_38"></div></td><td> <div id="sq_39"></div></td><td> <div id="sq_40"></div></td><td> <div id="sq_41"></div></td>
-				</tr>
-				<tr>
-					<td> <div id="sq_42" class="b"></div></td><td> <div id="sq_43"></div></td><td> <div id="sq_44"></div></td><td> <div id="sq_45"></div></td><td> <div id="sq_46"></div></td><td> <div id="sq_47"></div></td><td> <div id="sq_48" class="w"></div></td>
-				</tr>
-			</table>
-
-
-			<div id="msgBoard"> 
-				<div id = "create">
-					<button id='btnCreate' class="btn"> Create Game </button>
-					<input type='text' id="userNameField" placeholder="Username (optional)">
+		<div class="container">
+			<div class = "nav">
+				<div id="title"> 
+					<a href= "https://wataxx.herokuapp.com" style="text-decoration: none;"> Ataxx </a>
 				</div>
-				<div id = "join">
-					<button id="btnJoin" class="btn"> Join Game </button>
-					<input type='text' id="txtGameID" placeholder="Enter game ID here">
-				</div>
-				<div id="msgs">
-				</div>
-				<div id="msgs2">
-				</div>
-				<div id="resultMsg">
+				<div id="title-msg">
+					<p><br>Shuffle the pieces around to figure out the rules!</p>
+					<p>Play against an opponent by creating or joining a game!</p>
 				</div>
 			</div>
 
 
+				<div id="pool">
+					<h1>Pool</h1>
+				</div>
+
+				<div class="board">
+					<table>
+						<tr>
+							<td> <div id="sq_0" class="w"></div></td><td> <div id="sq_1"></div></td><td> <div id="sq_2"></div></td><td> <div id="sq_3"></div></td><td> <div id="sq_4"></div></td><td> <div id="sq_5"></div></td><td> <div id="sq_6" class="b"></div></td>
+						</tr>
+						<tr>
+							<td> <div id="sq_7"></div></td><td> <div id="sq_8"></div></td><td> <div id="sq_9"></div></td><td> <div id="sq_10"></div></td><td> <div id="sq_11"></div></td><td> <div id="sq_12"></div></td><td> <div id="sq_13"></div></td>
+						</tr>
+						<tr>
+							<td> <div id="sq_14"></div></td><td> <div id="sq_15"></div></td><td> <div id="sq_16"></div></td><td> <div id="sq_17"></div></td><td> <div id="sq_18"></div></td><td> <div id="sq_19"></div></td><td> <div id="sq_20"></div></td>
+						</tr>
+						<tr>
+							<td> <div id="sq_21"></div></td><td> <div id="sq_22"></div></td><td> <div id="sq_23"></div></td><td> <div id="sq_24"></div></td><td> <div id="sq_25"></div></td><td> <div id="sq_26"></div></td><td> <div id="sq_27"></div></td>
+						</tr>
+						<tr>
+							<td> <div id="sq_28"></div></td><td> <div id="sq_29"></div></td><td> <div id="sq_30"></div></td><td> <div id="sq_31"></div></td><td> <div id="sq_32"></div></td><td> <div id="sq_33"></div></td><td> <div id="sq_34"></div></td>
+						</tr>
+						<tr>
+							<td> <div id="sq_35"></div></td><td> <div id="sq_36"></div></td><td> <div id="sq_37"></div></td><td> <div id="sq_38"></div></td><td> <div id="sq_39"></div></td><td> <div id="sq_40"></div></td><td> <div id="sq_41"></div></td>
+						</tr>
+						<tr>
+							<td> <div id="sq_42" class="b"></div></td><td> <div id="sq_43"></div></td><td> <div id="sq_44"></div></td><td> <div id="sq_45"></div></td><td> <div id="sq_46"></div></td><td> <div id="sq_47"></div></td><td> <div id="sq_48" class="w"></div></td>
+						</tr>
+					</table>
+				</div>
+
+
+				<div id="msgBoard"> 
+					<div id = "create">
+						<button id='btnCreate' class="btn"> Create Game </button>
+						<input type='text' id="userNameField" placeholder="Username (optional)">
+					</div>
+					<div id = "join">
+						<button id="btnJoin" class="btn"> Join Game </button>
+						<input type='text' id="txtGameID" placeholder="Enter game ID here">
+					</div>
+					<div id="msgs"> </div>
+					<div id="msgs2"> </div>
+					<div id="resultMsg"> </div>
+				</div>
+
+
+
+
+
+			<footer>
+				<div class="foot">
+					<span class="transL">&mdash;</span><a href="https://github.com/ysicg/wataxx" title="github">Source Code</a> <span class="transR">&mdash;</span>
+				</div>
+			</footer>
 		</div>
-
-		<script src="client.js"></script>
-
+			<script src="client.js"></script>
 
 	</body>
-		<footer>
-			<div class="foot">
-				<span class="transL">&mdash;</span><a href="https://github.com/ysicg/wataxx" title="github">Source Code</a> <span class="transR">&mdash;</span>
-			</div>
-		</footer>
-
 </html>
 
 

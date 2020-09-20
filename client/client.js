@@ -348,7 +348,7 @@ function updateBoard(state) {
 
 	// Read new state
 	Object.entries(state).forEach( ([key, value]) => {
-		if (value) {document.getElementById("sq_" + key).classList.add(value);}
+		if (value) {document.getElementById("sq_" + key).className=value}
 	})
 
 }
