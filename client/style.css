@@ -175,11 +175,15 @@ input {
 
 
 .cell {
+	display:flex;
+	justify-content: center;
+	align-items: center;
 	background: #747979;
 	width: 100%;
 	height: 100%;
 	border-radius: 0%; 
-	border: 2px solid var(--bg);
+	border: 1.5px solid var(--bg);
+	box-sizing:border-box;
 }
 .legal-square { 
 	width:inherit;
@@ -188,13 +192,13 @@ input {
 	background: #b3b3b3 ;
 }
 
-.w { width:96%; height:96%; border-radius: 50%; background: var(--white-sphere) }
-.b { width:96%; height:96%; border-radius: 50%; background: var(--black-sphere) }
+.w { width:96%; height:96%; border-radius: 50%; background: var(--white-sphere); }
+.b { width:96%; height:96%; border-radius: 50%; background: var(--black-sphere); }
 
 
 .clicked-p { 
-	width:inherit;
-	height:inherit;
+	width:98%;
+	height:98%;
 	border-radius: 50%; 
 }
 
