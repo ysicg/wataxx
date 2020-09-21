@@ -6,7 +6,9 @@ const Game = require("./lib/Game.js").Game,
 	guid = require("./lib/utils.js").guid,
 	http = require("http"),
 	websocketServer = require("websocket").server,
-	app = require("express")()
+	express = require("express"),
+	path = require("path"),
+	app = express()
 
 /* Global Variables */
 
@@ -17,7 +19,7 @@ let color;
 
 
 // Serve client files with Express
-routeURLs(app)
+app.use(express.static(path.join(__dirname, 'client')))
 
 
 /* HTTP Server Instantiation */
@@ -25,59 +27,42 @@ routeURLs(app)
 const httpServer = http.createServer(app).listen(PORT, () => console.log(`httpServer listening on ${PORT}.`))
 
 
-/* WebSocket Server Instantiation */
+/* WebSocket Server Instantiation and Requests*/
 
 const wsServer = new websocketServer({
 	"httpServer": httpServer
 })
 
-// Handle WebSocket Requests
-runWebSocket(wsServer)
+wsServer.on("request", request => {
 
+	const connection = request.accept(null, request.origin); 
+	const clientID = guid() 
 
-/*-----------------------------------------------*/
+	clients[clientID] = { "connection": connection }
 
-function routeURLs(app) {
+	const payload = {
+		"method": "connect",
+		"clientID": clientID
+	}
 
-	app.get("/", (req, res) => res.sendFile(__dirname + "/" + "client/index.html"))
-	app.get('/style.css', (req, res) => res.sendFile(__dirname + "/" + "client/style.css"))
-	app.get('/client.js', (req, res) => res.sendFile(__dirname + "/" + "client/client.js"))
-}
+	connection.send(JSON.stringify(payload))
 
+	connection.on("open", () => console.log("WS connection opened."))
+	connection.on("close", () => console.log("WS connection has been closed."))
 
-function runWebSocket(wsServer){
-
-	wsServer.on("request", request => {
-
-		const connection = request.accept(null, request.origin); 
-		const clientID = guid() 
-
-		clients[clientID] = { "connection": connection }
-
-		const payload = {
-			"method": "connect",
-			"clientID": clientID
-		}
-
-		connection.send(JSON.stringify(payload))
-
-		connection.on("open", () => console.log("WS connection opened."))
-		connection.on("close", () => console.log("WS connection has been closed."))
-
-		connection.on("message", message => {
-			protocol(JSON.parse(message.utf8Data))
-		})
-
+	connection.on("message", message => {
+		protocol(JSON.parse(message.utf8Data))
 	})
 
-}
+})
 
+/*---------*/
 
 function protocol(result) {
 
 	if (result.method === "create") {
 
-			console.log(result.alone)
+		console.log(result.alone)
 		if (result.alone) { // game againsts oneself
 			games[result.clientID] = new Game(result.clientID, "w")
 			games[result.clientID].opponent = result.clientID
@@ -93,22 +78,22 @@ function protocol(result) {
 		}
 
 		else {
-		console.log(result.userName)
-		const gameID = guid();
-		games[gameID] = new Game(result.clientID)
+			console.log(result.userName)
+			const gameID = guid();
+			games[gameID] = new Game(result.clientID)
 
-		const payload = {
-			"method": "create",
-			"clientID": result.clientID,
-			"gameID": gameID,
-			"state": games[gameID].position,
-			"color": Object.keys(games[gameID].players)[0],
-			"userName": result.userName
+			const payload = {
+				"method": "create",
+				"clientID": result.clientID,
+				"gameID": gameID,
+				"state": games[gameID].position,
+				"color": Object.keys(games[gameID].players)[0],
+				"userName": result.userName
+			}
+
+			//clients[result.clientID].connection.send(JSON.stringify(payload));
+			Object.keys(clients).forEach(client => clients[client].connection.send(JSON.stringify(payload)));
 		}
-
-		//clients[result.clientID].connection.send(JSON.stringify(payload));
-		Object.keys(clients).forEach(client => clients[client].connection.send(JSON.stringify(payload)));
-	}
 	}
 
 	else if (result.method === "join") {
@@ -161,7 +146,8 @@ function protocol(result) {
 			"termination": games[gameID].termination
 		}
 
-		Object.values(games[gameID].players).forEach( clientID => clients[clientID].connection.send( JSON.stringify(payload) ) )
+		if (gameID === result.clientID) clients[result.clientID].connection.send( JSON.stringify(payload) )
+		else Object.values(games[gameID].players).forEach( clientID => clients[clientID].connection.send( JSON.stringify(payload) ) )
 
 	}
 

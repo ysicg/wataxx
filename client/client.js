@@ -1,18 +1,20 @@
+import {startingPosition, alone, id2base7, colorTurn, legalSquares} from "./gameUtils.js";
+
 'use strict';
-
-
-/* Global Variables */
 
 let HOST = location.origin.replace(/^http/, 'ws'),
 	ws = new WebSocket(HOST);
 
-let clientID, userName, gameID, color 
-const move = {from: null, to: null};
+/* Game Variables */
 
-const startingPosition = {}; for (let i = 0; i<49; i++) {startingPosition[i] = 0};
-startingPosition[0]="w"; startingPosition[6]="b"; startingPosition[42]="b"; startingPosition[48]="w";
-
-let STATE = startingPosition;
+const player = {
+"clientID": null,
+"userName": null,
+"gameID": null,
+"color": null,
+"move": {from: null, to: null},
+"state": startingPosition()
+}
 
 /* HTML Elements */
 
@@ -31,47 +33,9 @@ const white = document.getElementsByClassName("w"),
 	legalSquare=document.getElementsByClassName("legal-square")
 
 
-/* On Page Load Events */
+/* On Page Load Event Listeners*/
 
-
-// start game againt oneself
-function alone() {
-	const payloadAlone = {
-		"method" : "create",
-		"clientID": clientID,
-		"userName": userName,
-		"alone": "yes"
-	}
-
-	ws.send(JSON.stringify(payloadAlone))
-}
-
-
-//
-
-btnCreate.addEventListener("click", e => {
-
-	if (gameID) removeElement(gameID)
-
-	userName = userNameField.value ? userNameField.value : "Anonymous";
-
-	const payload = {
-		"method" : "create",
-		"clientID": clientID,
-		"userName": userName,
-	}
-
-	if (ws.readyState === ws.CLOSED) {
-		alert("WebSocket connection has been closed. Please refresh the page.")
-	}
-
-	ws.send(JSON.stringify(payload));
-	clearMsgBoard()
-	clearListener()
-
-})
-
-
+btnCreate.addEventListener("click", createGame) 
 btnJoin.addEventListener("click", join)
 
 txtGameID.addEventListener("keypress", e => {
@@ -89,7 +53,7 @@ ws.onmessage = message => {
 	const response = JSON.parse(message.data);
 
 	if (response.method === "connect") {
-		clientID = response.clientID;	
+		player.clientID = response.clientID;	
 		alone();
 	} else if (response.method === "error") {
 		alert(response.error);
@@ -99,23 +63,22 @@ ws.onmessage = message => {
 	else if (response.method === "create") {
 
 		if (response.alone) {
-			gameID = response.gameID;
-			color = response.color;
-			listen(color === "w" ? white : black)
-			console.log("alone response")
+			player.gameID = response.gameID;
+			player.color = response.color;
+			listen(player.color === "w" ? white : black)
 		}
 
 		else {
-			gameID = response.gameID;
-			populatePool(response.userName, gameID, response.clientID)
+			player.gameID = response.gameID;
+			populatePool(response.userName, response.clientID)
 
-			if (response.clientID === clientID) {
+			if (response.clientID === player.clientID) {
 				updateBoard(response.state)
 				listen(response.color === "white" ? white : black)
 				writeParagraph("Wait for an opponent to join your seek.")
 				writeParagraph("Or share this game ID with a friend:")
 				writeParagraph(`You have the ${response.color === "w" ? "white" : "black"} pieces.`, boardMsgs2)
-				writeParagraph(gameID)
+				writeParagraph(player.gameID)
 			}
 
 		}
@@ -123,75 +86,73 @@ ws.onmessage = message => {
 
 	else if (response.method === "join") {
 
-		if (response.joiner === clientID) {
+		if (response.joiner === player.clientID) {
 
-			color = response.color
+			player.color = response.color
 			const opColor = (response.color === "w" ? "b" : "w")
 			writeParagraph(`You have successfully joined the game.`);
-			writeParagraph(`You have the  ${color === "w" ? "white" : "black"} pieces.`, boardMsgs2);
+			writeParagraph(`You have the  ${player.color === "w" ? "white" : "black"} pieces.`, boardMsgs2);
 		} 
 
 		else {
 
-			color = (response.color === "w" ? "b" : "w")
-			writeParagraph(`${color === "w" ? "Black" : "White"} has joined the game.`, boardMsgs2);
+			player.color = (response.color === "w" ? "b" : "w")
+			writeParagraph(`${player.color === "w" ? "Black" : "White"} has joined the game.`, boardMsgs2);
 
 		}
 
-		if (document.contains(document.getElementById(gameID)))
+		if (document.contains(document.getElementById(player.gameID)))
 			removeElement(response.gameID)
 
 		updateBoard(response.state)
 		clearListener()
 
-		if (color === response.turn) {
-			listen( color === "w" ? white : black )
+		if (player.color === response.turn) {
+			listen( player.color === "w" ? white : black )
 		}
 
 	}
 
 	else if (response.method === "state"){
-		console.log(response.gameID)
-		console.log(response.clientID)
 
-		STATE = response.state;
+		player.state = response.state;
 		updateBoard(response.state);
 		clearListener()
 
 		if (response.termination) {
 			writeParagraph(response.termination, resultMsg);
 		} 
-		else if (response.gameID === response.clientID) {color = response.turn; listen(color === "w" ? white : black)}
-		else if (response.turn === color) listen(color === "w" ? white : black);
+		else if (response.gameID === response.clientID) {player.color = response.turn; listen(player.color === "w" ? white : black)}
+		else if (response.turn === player.color) listen(player.color === "w" ? white : black);
 
 	}
 
 }
 
-function populatePool(pooler = userName, gameID, creatorID) {
+function populatePool(pooler, creatorID) {
 
 
 	const pool = document.getElementById("pool")
 
 	let div = document.createElement("div"),
 		usr = document.createTextNode(pooler)
-	div.id = gameID;
+	div.id = player.gameID;
 
-	if (document.contains(document.getElementById(gameID)))
-		removeElement(clientID)
+	if (document.contains(document.getElementById(player.gameID)))
+		removeElement(player.clientID)
 
 	div.appendChild(usr)
 	pool.appendChild(div)
 	div.className = "game-link";
 	div.style.cursor = "pointer";
 
-	if (creatorID !== clientID) {
+	if (creatorID !== player.clientID) {
 		div.title = "Click to join this game"
 		div.addEventListener("click", () => {
 			const payload = {
 				"method" : "join",
-				"clientID": clientID,
-				"gameID": gameID
+				"clientID": player.clientID,
+				"gameID": player.gameID
 			}
 			ws.send(JSON.stringify(payload));
 			div.parentNode.removeChild(div);
@@ -217,11 +178,22 @@ function removeElement(id) {
 
 /* Board Events */
 
+function join() {
+
+	player.gameID = txtGameID.value;
+	const payload = {
+		"method" : "join",
+		"clientID": player.clientID,
+		"gameID": player.gameID
+	}
+	ws.send(JSON.stringify(payload));
+	boardMsgs.innerHTML='';
+	resultMsg.innerHTML='';
+}
 
 function listen(s) {
 
 	const sl= s.length
-	console.log(sl)
 	for (let i = 0; i < sl; i++) {
 		s[i].addEventListener("click", onClick) 
 		s[i].style.cursor="pointer"
@@ -234,12 +206,12 @@ function onClick() {
 
 	if (this.className.includes("clicked-p")){
 		clearLegalSquare()
-		document.getElementById(id).className = color
-		listen( color === "w" ? white : black )
+		document.getElementById(id).className = player.color
+		listen( player.color === "w" ? white : black )
 	}
 
-	else if (this.className.includes(color)){
-		move.from = parseInt(id.match(/(\d+)/)[0])
+	else if (this.className.includes(player.color)){
+		player.move.from = parseInt(id.match(/(\d+)/)[0])
 		document.getElementById(id).classList.add("clicked-p")
 		legalSquares(id)
 		clearListener()
@@ -250,17 +222,17 @@ function onClick() {
 
 	else if (this.className.includes("legal-square")){
 
-		move.to = parseInt(id.match(/(\d+)/)[0])
+		player.move.to = parseInt(id.match(/(\d+)/)[0])
 		const payload = {
 			"method" : "move",
-			"clientID": clientID,
-			"gameID": gameID,
-			"move": move
+			"clientID": player.clientID,
+			"gameID": player.gameID,
+			"move": player.move
 		}
 
-		if (gameID) ws.send(JSON.stringify(payload));
+		if (player.gameID) ws.send(JSON.stringify(payload));
 
-		document.getElementById(id).className = color
+		document.getElementById(id).className = player.color
 
 		clearLegalSquare()
 		clearClickedPiece()
@@ -301,40 +273,6 @@ function clearLegalSquare(){
 
 
 
-function legalSquares(id) {
-	/* to emulate a 2d array, uses base 7 indexing of squares to find neighboring squares */
-
-	const b7s=id2base7(id),
-		row_limit = 6, column_limit = 6,
-		ls=[]
-
-	let i, j, z
-
-	if (b7s.length === 1) {j=0; i=parseInt(b7s)}
-	else { j=parseInt(b7s.charAt(0)); i=parseInt(b7s.charAt(1)) } 
-
-	for (let x = Math.max(0, i-2); x <= Math.min(i+2, row_limit); x++) {
-
-		for (let y = Math.max(0, j-2); y <= Math.min(j+2, column_limit); y++) {
-
-			if (x != i || y != j){
-				z = y.toString() + x.toString()
-				ls.push(parseInt(z, 7))
-			}
-
-		}
-
-	}
-
-	ls.forEach( (element, index, ls) => {
-
-		if (STATE[element] === 0) {
-			document.getElementById("sq_" + ls[index].toString()).classList.add("legal-square")
-		}
-
-	})
-
-}
 
 
 function updateBoard(state) {
@@ -354,35 +292,6 @@ function updateBoard(state) {
 }
 
 
-/* Utils */
-
-function join() {
-
-	gameID = txtGameID.value;
-	const payload = {
-		"method" : "join",
-		"clientID": clientID,
-		"gameID": gameID
-	}
-	ws.send(JSON.stringify(payload));
-	boardMsgs.innerHTML='';
-	resultMsg.innerHTML='';
-}
-
-function id2base7(id) {
-	/* convert id to base 7. Example: "sq_8" -> "12"  */
-
-	return parseInt(id.match(/(\d+)/)[0]).toString(7);
-
-}
-
-
-function colorTurn(turn) {
-
-	if (turn % 2 === 0) return "w"
-	else return "b"
-
-}
 
 
 /* Game Messages */
@@ -424,3 +333,28 @@ function focusJoin() {
 	txtGameID.focus()
 
 }
+
+
+function createGame() {
+	if (player.gameID) removeElement(player.gameID)
+
+	player.userName = userNameField.value ? userNameField.value : "Anonymous";
+
+	const payload = {
+		"method" : "create",
+		"clientID": player.clientID,
+		"userName": player.userName
+	}
+
+	if (ws.readyState === ws.CLOSED) {
+		alert("WebSocket connection has been closed. Please refresh the page.")
+	}
+
+	ws.send(JSON.stringify(payload));
+	clearMsgBoard()
+	clearListener()
+
+}
+
+
+export {player, ws}
