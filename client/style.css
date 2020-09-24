@@ -45,11 +45,23 @@ body {
 .nav {
 	grid-area: nav2;
 	display:inline-flex;
+	flex-wrap:wrap;
 	height:100%;
 	gap:30px;
 	align-items: center;
 	justify-items: center;
 }
+
+.nav3 {
+	grid-area: nav3;
+	background: #747979;
+	display:flex;
+	padding: 0 10%;
+	gap: 80%;
+	justify-content: center;
+}
+
+
 
 
 
@@ -61,7 +73,7 @@ body {
 	color: var(--fg);
 }
 #title-msg p {
-	margin-bottom:0 !important;
+	margin-bottom:0;
 }
 
 
@@ -252,9 +264,10 @@ input {
 @media only screen and (max-width: 900px) {
 	.container {
 		grid-template-columns: 1fr 1fr;
-		grid-template-rows: 0.8fr 650px 1fr 0.2fr;
+		grid-template-rows: 0.8fr 0.3fr 650px 1fr 0.2fr;
 		grid-template-areas:
 		'nav2 nav2'
+		'nav3 nav3'
 		'board board'
 		'pool msgs'
 		'footer footer';
@@ -273,9 +286,10 @@ input {
 @media only screen and (max-width: 540px) {
 	.container {
 		grid-template-columns: 1fr;
-		grid-template-rows: 0.8fr 650px 1fr 1fr 0.2fr;
+		grid-template-rows: 0.8fr 0.2fr 650px 1fr 1fr 0.2fr;
 		grid-template-areas:
 		'nav2'
+		'nav3'
 		'board'
 		'msgs'
 		'pool'

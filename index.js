@@ -143,7 +143,8 @@ function protocol(result) {
 			"gameID": gameID,
 			"state": games[gameID].position,
 			"turn": games[gameID].turn,
-			"termination": games[gameID].termination
+			"termination": games[gameID].termination,
+			"count": games[gameID].count
 		}
 
 		if (gameID === result.clientID) clients[result.clientID].connection.send( JSON.stringify(payload) )

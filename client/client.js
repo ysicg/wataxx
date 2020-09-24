@@ -25,7 +25,9 @@ const boardMsgs = document.getElementById("msgs"),
 	btnCreate = document.getElementById("btnCreate"),
 	btnJoin = document.getElementById("btnJoin"),
 	txtGameID = document.getElementById("txtGameID"),
-	userNameField = document.getElementById("userNameField")
+	userNameField = document.getElementById("userNameField"),
+	whiteCount = document.getElementById("whiteCount"),
+	blackCount = document.getElementById("blackCount")
 
 const white = document.getElementsByClassName("w"),
 	black = document.getElementsByClassName("b"),
@@ -115,6 +117,9 @@ ws.onmessage = message => {
 
 	else if (response.method === "state"){
 
+		whiteCount.innerHTML = response.count.wc
+		blackCount.innerHTML = response.count.bc
+
 		player.state = response.state;
 		updateBoard(response.state);
 		clearListener()
@@ -149,6 +154,8 @@ function populatePool(pooler, creatorID) {
 	if (creatorID !== player.clientID) {
 		div.title = "Click to join this game"
 		div.addEventListener("click", () => {
+			whiteCount.innerHTML = '2';
+			blackCount.innerHTML = '2';
 			const payload = {
 				"method" : "join",
 				"clientID": player.clientID,
@@ -179,6 +186,8 @@ function removeElement(id) {
 /* Board Events */
 
 function join() {
+	whiteCount.innerHTML = '2';
+	blackCount.innerHTML = '2';
 
 	player.gameID = txtGameID.value;
 	const payload = {
@@ -337,6 +346,8 @@ function focusJoin() {
 
 function createGame() {
 	if (player.gameID) removeElement(player.gameID)
+	whiteCount.innerHTML = '2';
+	blackCount.innerHTML = '2';
 
 	player.userName = userNameField.value ? userNameField.value : "Anonymous";
 
