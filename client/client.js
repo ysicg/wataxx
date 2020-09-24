@@ -27,7 +27,8 @@ const boardMsgs = document.getElementById("msgs"),
 	txtGameID = document.getElementById("txtGameID"),
 	userNameField = document.getElementById("userNameField"),
 	whiteCount = document.getElementById("whiteCount"),
-	blackCount = document.getElementById("blackCount")
+	blackCount = document.getElementById("blackCount"),
+	popUp = document.getElementById("popUp")
 
 const white = document.getElementsByClassName("w"),
 	black = document.getElementsByClassName("b"),
@@ -126,6 +127,9 @@ ws.onmessage = message => {
 
 		if (response.termination) {
 			writeParagraph(response.termination, resultMsg);
+			popUp.innerHTML = response.termination;
+			popUp.style.zIndex = "2"
+
 		} 
 		else if (response.gameID === response.clientID) {player.color = response.turn; listen(player.color === "w" ? white : black)}
 		else if (response.turn === player.color) listen(player.color === "w" ? white : black);
@@ -188,6 +192,7 @@ function removeElement(id) {
 function join() {
 	whiteCount.innerHTML = '2';
 	blackCount.innerHTML = '2';
+	popUp.style.zIndex = "0"
 
 	player.gameID = txtGameID.value;
 	const payload = {
@@ -348,6 +353,7 @@ function createGame() {
 	if (player.gameID) removeElement(player.gameID)
 	whiteCount.innerHTML = '2';
 	blackCount.innerHTML = '2';
+	popUp.style.zIndex = "0"
 
 	player.userName = userNameField.value ? userNameField.value : "Anonymous";
 
