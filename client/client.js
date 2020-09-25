@@ -122,6 +122,7 @@ ws.onmessage = message => {
 		blackCount.innerHTML = response.count.bc
 
 		player.state = response.state;
+		console.log(response.state)
 		updateBoard(response.state);
 		clearListener()
 
@@ -132,8 +133,15 @@ ws.onmessage = message => {
 			popUp.addEventListener("click", () => popUp.style.zIndex = "0")
 
 		} 
-		else if (response.gameID === response.clientID) {player.color = response.turn; listen(player.color === "w" ? white : black)}
-		else if (response.turn === player.color) listen(player.color === "w" ? white : black);
+
+		else if (response.gameID === response.clientID) {
+			player.color = response.turn;
+			listen(player.color === "w" ? white : black);
+		}
+
+		else if (response.turn === player.color) {
+			listen(player.color === "w" ? white : black);
+		}
 
 	}
 
@@ -297,8 +305,16 @@ function updateBoard(state) {
 	const wl = white.length,
 		bl = black.length;
 
-	for (let i=0; i<wl; i++) {if (white[0]) white[0].className=""}
-	for (let i=0; i<wl; i++) {if (black[0]) black[0].className=""}
+	console.log(`white.length = ${white.length}`)
+	console.log(`black.length = ${black.length}`)
+
+	for (let i=0; i<wl; i++) {
+		if (white[0]) white[0].className=""
+	}
+	for (let i=0; i<bl; i++) {
+		console.log(i, wl)
+		if (black[0]) black[0].className=""
+	}
 
 	// Read new state
 	Object.entries(state).forEach( ([key, value]) => {
@@ -352,10 +368,15 @@ function focusJoin() {
 
 
 function createGame() {
+
+	if (ws.readyState === ws.CLOSED) {
+		alert("WebSocket connection has been closed. Please refresh the page.")
+	}
+
 	if (player.gameID) removeElement(player.gameID)
 	whiteCount.innerHTML = '2';
 	blackCount.innerHTML = '2';
-	popUp.style.zIndex = "0"
+	popUp.style.zIndex = "0";
 
 	player.userName = userNameField.value ? userNameField.value : "Anonymous";
 
@@ -363,10 +384,6 @@ function createGame() {
 		"method" : "create",
 		"clientID": player.clientID,
 		"userName": player.userName
-	}
-
-	if (ws.readyState === ws.CLOSED) {
-		alert("WebSocket connection has been closed. Please refresh the page.")
 	}
 
 	ws.send(JSON.stringify(payload));
