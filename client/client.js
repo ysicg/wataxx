@@ -129,6 +129,7 @@ ws.onmessage = message => {
 			writeParagraph(response.termination, resultMsg);
 			popUp.innerHTML = response.termination;
 			popUp.style.zIndex = "2"
+			popUp.addEventListener("click", () => popUp.style.zIndex = "0")
 
 		} 
 		else if (response.gameID === response.clientID) {player.color = response.turn; listen(player.color === "w" ? white : black)}
@@ -176,6 +177,7 @@ function populatePool(pooler, creatorID) {
 
 			div.parentNode.removeChild(div);
 			clearMsgBoard()
+			alone()
 
 		})
 	}
