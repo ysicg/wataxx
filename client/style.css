@@ -72,12 +72,13 @@ body {
 	grid-area: nav3;
 	align-self: end;
 	display:flex;
-	width:100%;
-	gap: 30px;
-	justify-content: center;
-	align-items: stretch;
+	gap: 10px;
+	align-items: center;
+	/*justify-content: center;
 	box-sizing:border-box;
 	position: relative;
+	background: #747979;
+	*/
 	font-size: 30px;
 }
 
